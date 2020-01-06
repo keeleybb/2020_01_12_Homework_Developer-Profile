@@ -3,6 +3,7 @@ const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
 
+
 //Maybe put variables here to be rewritten
 let name;
 let imgUrl;
@@ -54,6 +55,7 @@ inquirer
 
                     console.log(`Saved ${gitHubProfile} repos`);
                     // generateHTML();
+                    makepdf();
                 });
             });
         });
@@ -76,8 +78,32 @@ function generateHTML() {
                 />
                 <title>Document</title>
               </head>
+              <style>
+            
+              *{
+                text-align:center;
+                border: 0;
+                margin: 10px;
+                padding: 0;
+                color: #FFFFFF;
+              }
+              .pdfwidth {
+                  width: 750px;
+              }
+                
+              .card {
+                background-color:purple;
+                margin:10px;
+                
+              }
+              
+              .header{
+                background-color:purple;
+              }
+              
+              </style>
               <body>
-                <div class="container">
+                <div class="pdfwidth">
                   <div class="row">
                     <div class="col header">
                       <img src="${imgUrl}" />
@@ -117,23 +143,17 @@ function generateHTML() {
                 </div>
               </body>
             </html>
-            <style>
-            
-            *{
-              text-align:center;
-             
-            }
-              
-            .card {
-              background-color:red;
-              margin:10px;
-              
-            }
-            
-            .header{
-              background-color:red;
-            }
-            
-            </style>
             `;
 }
+
+
+function makepdf() {
+    var pdf = require('html-pdf');
+    var html = fs.readFileSync('./index.html', 'utf8');
+    var options = { format: 'A4' };
+
+    pdf.create(html, options).toFile('./profile.pdf', function (err, res) {
+        if (err) return console.log(err);
+        console.log(res); // { filename: '/app/businesscard.pdf' }
+    });
+};
