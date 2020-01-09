@@ -35,9 +35,6 @@ inquirer
   .then(function (prompt) {
     const queryUrl = `https://api.github.com/users/${prompt.username}`;
     axios.get(queryUrl).then(function (res) {
-      // if (error) {
-      //   console.log("Error ", error);
-      // }
       // console.log(res.data);
       // console.log("Img Url ", res.data.avatar_url);
       // console.log("Name: ", res.data.name);
@@ -63,9 +60,8 @@ inquirer
       axios.get(queryUrl2).then(function (response) {
 
         // console.log(response.data);
-        console.log("Starred: ", response.data.length);
+        // console.log("Starred: ", response.data.length);
         let numHolder = parseInt(response.data.length);
-        console.log(numHolder);
         starred = numHolder;
       }).then(function () {
         fs.writeFile("index.html", generateHTML(), function (err) {
@@ -98,7 +94,8 @@ function generateHTML() {
                   rel="stylesheet"
                   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
                 />
-                <title>Document</title>
+                <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+                <title>Passthrough html</title>
               </head>
               <style>
             
@@ -113,6 +110,7 @@ function generateHTML() {
                 background-image: linear-gradient(180deg, #a390c2 13.79%, #d5d2d9 13.79%, #d5d2d9 36.21%, #a390c2 36.21%, #a390c2 50%, #a390c2 50%, #a390c2 63.79%, #d5d2d9 63.79%, #d5d2d9 86.21%, #a390c2 86.21%, #a390c2 100%);
                 background-size: 2900.00px 2900.00px;
                 height: 1002px;
+                font-family: 'Comfortaa', cursive;
               }
 
               .pdfwidth {
