@@ -35,13 +35,16 @@ inquirer
   .then(function (prompt) {
     const queryUrl = `https://api.github.com/users/${prompt.username}`;
     axios.get(queryUrl).then(function (res) {
-      console.log(res.data);
-      console.log("Img Url ", res.data.avatar_url);
-      console.log("Name: ", res.data.name);
-      console.log("Location: ", res.data.location);
-      console.log("Repositories: ", res.data.public_repos);
-      console.log("Followers: ", res.data.followers);
-      console.log("Following: ", res.data.following);
+      // if (error) {
+      //   console.log("Error ", error);
+      // }
+      // console.log(res.data);
+      // console.log("Img Url ", res.data.avatar_url);
+      // console.log("Name: ", res.data.name);
+      // console.log("Location: ", res.data.location);
+      // console.log("Repositories: ", res.data.public_repos);
+      // console.log("Followers: ", res.data.followers);
+      // console.log("Following: ", res.data.following);
 
       //Reset Variables
       name = res.data.name;
@@ -75,6 +78,8 @@ inquirer
           makepdf();
         });
       });
+    }).catch(function (error) {
+      console.log("Error: ", error);
     });
   });
 
@@ -201,6 +206,6 @@ function makepdf() {
 
   pdf.create(html, options).toFile('./profile.pdf', function (err, res) {
     if (err) return console.log(err);
-    console.log(res); // { filename: '/app/businesscard.pdf' }
+    console.log(res); //return file name
   });
 };

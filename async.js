@@ -32,16 +32,16 @@ inquirer
       name: "favorite_color"
     }
   ])
-  .then(function (prompt) {
+  .then(async function (prompt) {
     const queryUrl = `https://api.github.com/users/${prompt.username}`;
-    axios.get(queryUrl).then(function (res) {
-      console.log(res.data);
-      console.log("Img Url ", res.data.avatar_url);
-      console.log("Name: ", res.data.name);
-      console.log("Location: ", res.data.location);
-      console.log("Repositories: ", res.data.public_repos);
-      console.log("Followers: ", res.data.followers);
-      console.log("Following: ", res.data.following);
+    await axios.get(queryUrl).then(function (res) {
+      // console.log(res.data);
+      // console.log("Img Url ", res.data.avatar_url);
+      // console.log("Name: ", res.data.name);
+      // console.log("Location: ", res.data.location);
+      // console.log("Repositories: ", res.data.public_repos);
+      // console.log("Followers: ", res.data.followers);
+      // console.log("Following: ", res.data.following);
 
       //Reset Variables
       name = res.data.name;
@@ -56,15 +56,17 @@ inquirer
       bio = res.data.bio;
       gitHubProfile = name + "\n" + location;
 
+
       const queryUrl2 = `https://api.github.com/users/${prompt.username}/starred`;
-      axios.get(queryUrl2).then(function (response) {
+      await axios.get(queryUrl2).then(function (response) {
 
         // console.log(response.data);
         console.log("Starred: ", response.data.length);
         let numHolder = parseInt(response.data.length);
         console.log(numHolder);
         starred = numHolder;
-      }).then(function () {
+      })
+      await function () {
         fs.writeFile("index.html", generateHTML(), function (err) {
           if (err) {
             throw err;
@@ -73,8 +75,10 @@ inquirer
           console.log(`Saved ${gitHubProfile} repos`);
           // generateHTML();
           makepdf();
-        });
-      });
+        })
+      }
+    }).catch(function (error) {
+      console.log(error.response);
     });
   });
 
