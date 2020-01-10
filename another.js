@@ -196,7 +196,7 @@ function generateHTML() {
               </body>
             </html>
             `;
-}
+};
 
 
 function makepdf() {
