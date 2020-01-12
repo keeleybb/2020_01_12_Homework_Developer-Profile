@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+
+//Make the HTML to get started 
+// //Make the HTML to get started 
+
+function generateHTML(profile) {
+
+  console.log("Other file: ", profile);
+  return `<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -30,12 +37,12 @@
     }
 
     .card {
-      background-color:orange;
+      background-color:${profile.fav_color};
       margin:10px;
     }
 
     .header{
-      background-color:orange;
+      background-color:${profile.fav_color};
       border-radius: 10px;
     }
 
@@ -67,41 +74,44 @@
       <div class="pdfwidth">
         <div class="row">
           <div class="col header">
-            <img class="profile-img" src="https://avatars0.githubusercontent.com/u/54555434?v=4" />
+            <img class="profile-img" src="${profile.imgUrl}" />
             <h1>Hi!</h1>
-            <h1>My name is Keeley</h1>
-            <h3>Currently at Arrow Electronics</h3>
-            <p><i class="fas fa-map-marked-alt"></i><a href="https://www.google.com/maps/place/Denver, CO">Denver, CO</a>
-             <i class="far fa-user-circle"></i><a href="https://keeleybb.github.io/2020_01-04_Homework_Updated-Portfolio/">Blog</a>
-              <i class="fab fa-github"></i><a href="https://github.com/keeleybb">GitHub</a></p>
+            <h1>My name is ${profile.name}</h1>
+            <h3>Currently at ${profile.job}</h3>
+            <p><i class="fas fa-map-marked-alt"></i><a href="https://www.google.com/maps/place/${profile.location}">${profile.location}</a>
+             <i class="far fa-user-circle"></i><a href="${profile.blog}">Blog</a>
+              <i class="fab fa-github"></i><a href="${profile.mainUrl}">GitHub</a></p>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <p class="bio-class">I'm a problem-solver by nature and love learning new things, so why not learn to code. </p>
+            <p class="bio-class">${profile.bio}</p>
           </div>
         </div>
         <div class="row">
           <div class="col card">
             <p>Public Repositories</p>
-            <p>26</p>
+            <p>${profile.pub_repos}</p>
           </div>
           <div class="col card">
             <p>Followers</p>
-            <p>6</p>
+            <p>${profile.followers}</p>
           </div>
         </div>
         <div class="row">
             <div class="col card">
               <p>GitHub Stars</p>
-              <p>1</p>
+              <p>${profile.starred}</p>
             </div>
             <div class="col card">
               <p>Following</p>
-              <p>7</p>
+              <p>${profile.following}</p>
             </div>
           </div>
       </div>
     </body>
     <script src="https://kit.fontawesome.com/1a27f6d0f7.js" crossorigin="anonymous"></script>
-  </html>
+  </html>`;
+};
+
+module.exports = generateHTML;

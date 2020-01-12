@@ -5,88 +5,88 @@ const inquirer = require("inquirer");
 const pdf = require('html-pdf');
 
 
+const questions = [
+  {
+    type: "input",
+    message: "Enter your GitHub username",
+    name: "username"
+  },
+  {
+    type: "list",
+    message: "What is your favorite color?",
+    choices: ["red", "orange", "yellow", "green", "blue", "purple", "pink", "hotpink", "teal"],
+    name: "favorite_color"
+  }
+];
+
 //Maybe put variables here to be rewritten
-let name;
-let imgUrl;
-let location;
-let pub_repos;
-let followers;
-let following;
-let starred;
-let gitHubProfile;
-let fav_color;
-let blog;
-let mainUrl;
-let bio;
-let job;
+// let name;
+// let imgUrl;
+// let location;
+// let pub_repos;
+// let followers;
+// let following;
+// let starred;
+// let blog;
+// let mainUrl;
+// let bio;
+// let job;
 
 inquirer
-  .prompt([
-    {
-      type: "input",
-      message: "Enter your GitHub username",
-      name: "username"
-    },
-    {
-      type: "list",
-      message: "What is your favorite color?",
-      choices: ["red", "orange", "yellow", "green", "blue", "purple", "pink", "hotpink", "teal"],
-      name: "favorite_color"
-    }
-  ])
-  .then(function (prompt) {
+  .prompt(questions)
+  .then(async function (prompt) {
     const queryUrl = `https://api.github.com/users/${prompt.username}`;
-    axios.get(queryUrl).then(function (res) {
-      // console.log(res.data);
-      // console.log("Img Url ", res.data.avatar_url);
-      // console.log("Name: ", res.data.name);
-      // console.log("Location: ", res.data.location);
-      // console.log("Repositories: ", res.data.public_repos);
-      // console.log("Followers: ", res.data.followers);
-      // console.log("Following: ", res.data.following);
+    let { data } = await axios.get(queryUrl)
+    // console.log(res.data);
+    // console.log("Img Url ", res.data.avatar_url);
+    // console.log("Name: ", res.data.name);
+    // console.log("Location: ", res.data.location);
+    // console.log("Repositories: ", res.data.public_repos);
+    // console.log("Followers: ", res.data.followers);
+    // console.log("Following: ", res.data.following);
+    console.log("updates.js: ", data);
+    //Reset Variables
+    const profile = {
+      name: data.name,
+      imgUrl: data.avatar_url,
+      location: data.location,
+      pub_repos: data.public_repos,
+      followers: data.followers,
+      following: data.following,
+      // fav_color = prompt.favorite_color,
+      blog: data.blog,
+      mainUrl: data.html_url,
+      bio: data.bio,
+      job: data.company,
+      fav_color: prompt.favorite_color,
+      starred: 0
+    }
 
-      //Reset Variables
-      name = res.data.name;
-      imgUrl = res.data.avatar_url;
-      location = res.data.location;
-      pub_repos = res.data.public_repos;
-      followers = res.data.followers;
-      following = res.data.following;
-      fav_color = prompt.favorite_color;
-      blog = res.data.blog;
-      mainUrl = res.data.html_url;
-      bio = res.data.bio;
-      job = res.data.company;
-      gitHubProfile = name + "\n" + location;
+    const queryUrl2 = `https://api.github.com/users/${prompt.username}/starred?per_page=100`;
+    axios.get(queryUrl2).then(function (response) {
 
-      const queryUrl2 = `https://api.github.com/users/${prompt.username}/starred?per_page=100`;
-      axios.get(queryUrl2).then(function (response) {
+      // console.log(response.data);
+      let numHolder = parseInt(response.data.length);
+      console.log(numHolder);
+      profile.starred = numHolder;
 
-        // console.log(response.data);
-        console.log("Starred: ", response.data.length);
-        let numHolder = parseInt(response.data.length);
-        console.log(numHolder);
-        starred = numHolder;
-      }).then(function () {
-        fs.writeFile("index.html", generateHTML(), function (err) {
-          if (err) {
-            throw err;
-          }
+      fs.writeFile("index.html", generateHTML(profile), function (err) {
+        if (err) {
+          throw err;
+        }
 
-          console.log(`Saved ${gitHubProfile} repos`);
-          makepdf();
-        });
+        makepdf();
       });
-    }).catch(function (error) {
-      console.log("Error: ", error);
     });
+  }).catch(function (error) {
+    console.log("Error: ", error);
   });
 
 
 
-//Make the HTML to get started 
+// //Make the HTML to get started 
 
-function generateHTML() {
+function generateHTML({ name, imgUrl, location, pub_repos, followers, following, blog, mainUrl, bio, job, fav_color, starred }) {
   return `
             <!DOCTYPE html>
             <html lang="en">
@@ -100,7 +100,7 @@ function generateHTML() {
                 <title>Document</title>
               </head>
               <style>
-            
+
               *{
                 text-align:center;
                 border: 0;
@@ -118,12 +118,12 @@ function generateHTML() {
                   width: 750px;
                   margin-top: 100px;
               }
-                
+
               .card {
                 background-color:${fav_color};
                 margin:10px;
               }
-              
+
               .header{
                 background-color:${fav_color};
                 border-radius: 10px;
@@ -208,3 +208,5 @@ function makepdf() {
     console.log(res); //return file name
   });
 };
+
+
