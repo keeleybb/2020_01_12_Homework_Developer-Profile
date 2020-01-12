@@ -3,6 +3,7 @@ const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
 const pdf = require('html-pdf');
+//const generateHTML = require('./generateHTML')
 
 
 //Maybe put variables here to be rewritten
@@ -34,59 +35,64 @@ inquirer
       name: "favorite_color"
     }
   ])
-  .then(function (prompt) {
+  .then(async function (prompt) {
     const queryUrl = `https://api.github.com/users/${prompt.username}`;
-    axios.get(queryUrl).then(function (res) {
-      // console.log(res.data);
-      // console.log("Img Url ", res.data.avatar_url);
-      // console.log("Name: ", res.data.name);
-      // console.log("Location: ", res.data.location);
-      // console.log("Repositories: ", res.data.public_repos);
-      // console.log("Followers: ", res.data.followers);
-      // console.log("Following: ", res.data.following);
 
-      //Reset Variables
-      name = res.data.name;
-      imgUrl = res.data.avatar_url;
-      location = res.data.location;
-      pub_repos = res.data.public_repos;
-      followers = res.data.followers;
-      following = res.data.following;
-      fav_color = prompt.favorite_color;
-      blog = res.data.blog;
-      mainUrl = res.data.html_url;
-      bio = res.data.bio;
-      job = res.data.company;
-      gitHubProfile = name + "\n" + location;
 
-      const queryUrl2 = `https://api.github.com/users/${prompt.username}/starred?per_page=100`;
-      axios.get(queryUrl2).then(function (response) {
+    let { data } = await axios.get(queryUrl)
 
-        // console.log(response.data);
-        console.log("Starred: ", response.data.length);
-        let numHolder = parseInt(response.data.length);
-        console.log(numHolder);
-        starred = numHolder;
-      }).then(function () {
-        fs.writeFile("index.html", generateHTML(), function (err) {
-          if (err) {
-            throw err;
-          }
 
-          console.log(`Saved ${gitHubProfile} repos`);
-          makepdf();
-        });
-      });
-    }).catch(function (error) {
-      console.log("Error: ", error);
+    // console.log(res.data);
+    // console.log("Img Url ", res.data.avatar_url);
+    // console.log("Name: ", res.data.name);
+    // console.log("Location: ", res.data.location);
+    // console.log("Repositories: ", res.data.public_repos);
+    // console.log("Followers: ", res.data.followers);
+    // console.log("Following: ", res.data.following);
+
+    //Reset Variables
+    name = data.name;
+    imgUrl = data.avatar_url;
+    location = data.location;
+    pub_repos = data.public_repos;
+    followers = data.followers;
+    following = data.following;
+    data.fav_color = prompt.favorite_color;
+    blog = res.data.blog;
+    mainUrl = res.data.html_url;
+    bio = res.data.bio;
+    job = res.data.company;
+    gitHubProfile = name + "\n" + location;
+
+    const queryUrl2 = `https://api.github.com/users/${prompt.username}/starred?per_page=100`;
+    let response = await axios.get(queryUrl2)
+
+
+    // console.log(response.data);
+    console.log("Starred: ", response.data.length);
+    let numHolder = parseInt(response.data.length);
+    console.log(numHolder);
+    starred = numHolder;
+
+    fs.writeFile("index.html", generateHTML(data), function (err) {
+      if (err) {
+        throw err;
+      }
+
+      console.log(`Saved ${gitHubProfile} repos`);
+      makepdf();
     });
+  })
+  .catch(function (error) {
+    console.log("Error: ", error);
+
   });
 
 
 
 //Make the HTML to get started 
 
-function generateHTML() {
+function generateHTML({ fav_color, imgUrl, }) {
   return `
             <!DOCTYPE html>
             <html lang="en">

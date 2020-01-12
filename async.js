@@ -34,7 +34,7 @@ inquirer
   ])
   .then(async function (prompt) {
     const queryUrl = `https://api.github.com/users/${prompt.username}`;
-    await axios.get(queryUrl).then(function (res) {
+    await axios.get(queryUrl).then(async function (res) {
       // console.log(res.data);
       // console.log("Img Url ", res.data.avatar_url);
       // console.log("Name: ", res.data.name);
@@ -65,8 +65,7 @@ inquirer
         let numHolder = parseInt(response.data.length);
         console.log(numHolder);
         starred = numHolder;
-      })
-      await function () {
+      }).then(function () {
         fs.writeFile("index.html", generateHTML(), function (err) {
           if (err) {
             throw err;
@@ -76,7 +75,7 @@ inquirer
           // generateHTML();
           makepdf();
         })
-      }
+      })
     }).catch(function (error) {
       console.log(error.response);
     });
