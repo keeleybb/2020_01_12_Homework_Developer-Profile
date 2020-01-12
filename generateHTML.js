@@ -1,10 +1,8 @@
 
-//Make the HTML to get started 
-// //Make the HTML to get started 
-
+//Make the HTML with profile from index.js
 function generateHTML(profile) {
 
-  console.log("Other file: ", profile);
+  // console.log("Other file: ", profile);
   return `<!DOCTYPE html>
   <html lang="en">
     <head>
