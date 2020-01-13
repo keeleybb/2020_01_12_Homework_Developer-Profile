@@ -48,7 +48,6 @@ inquirer
 
     // console.log(response.data);
     let numHolder = parseInt(response.data.length);
-    console.log(numHolder);
     profile.starred = numHolder;
 
     // console.log(profile);
@@ -60,18 +59,18 @@ inquirer
         throw err;
       }
 
-      makepdf();
+      makepdf(prompt);
     });
   }).catch(function (error) {
     console.log("Error: ", error);
   });
 
-
-function makepdf() {
+//Finally Make the PDF
+function makepdf(prompt) {
   var html = fs.readFileSync('./index.html', 'utf8');
   var options = { format: 'A4' };
 
-  pdf.create(html, options).toFile('./profile.pdf', function (err, res) {
+  pdf.create(html, options).toFile(`./${prompt.username}-profile.pdf`, function (err, res) {
     if (err) return console.log(err);
     console.log(res); //return file name
   });
