@@ -1,6 +1,12 @@
 # GitHub Developer Profile
 This is an assignment for a web development bootcamp. This command-line application allows for user input of GitHub username and favorite color to generate a User Profile PDF. 
 
+NPMs Utilized:
+*html-pdf
+*axios
+*inquirer
+
+
 ![Command line Github profile pdf generator](profile.gif)
 
 # MIT License
